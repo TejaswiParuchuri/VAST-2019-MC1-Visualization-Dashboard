@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<head>
+    <meta charset='utf-8'>
+    <title>VAST-2019 CHALLENGE</title>
+    <link rel='stylesheet' href='css/style.css'>
+    <script src='https://d3js.org/d3.v5.min.js'></script>
+    <script src='scripts/choropleth.js'></script>
+    <script src='scripts/scatterplot.js'></script>
+    <script src='scripts/barchart.js'></script>
+    <script src='scripts/radar.js'></script>
+    <script src='scripts/innovative.js'></script>
+    <script src="https://d3js.org/d3-array.v2.min.js"></script>
+    <link rel='stylesheet' href='css/styles.css'>
+    <script src="https://kit.fontawesome.com/d21ce2486e.js" crossorigin="anonymous"></script>
+    <!-- CSS only -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+<!-- JS, Popper.js, and jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="bgimage"></div>
+    <div id='wrapper' class="container eachrow">
+        <div class="d-flex m-3 justify-content-center titles">
+
+        <h2>DV Project - iMark@Himark</h2>
+        </div>
+        <div class="text-center anytext">
+            <div class="row">
+            <div class="col-md ">
+                <h5>Kusumakumari Vanteru - kvanteru@asu.edu - 1217031218</h5>
+                <h5>Thanuja Kallamadi - tkallama@asu.edu - 1217132202</h5>
+                <h5>Siva Mounavi Dadireddy - sdadired@asu.edu - 1217018868</h5>
+            </div>
+            <div class="col-md">
+                <h5>Tejaswi Paruchuri - tparuchu@asu.edu - 1213268054</h5>
+<h5>Sai Ramyatha Posani - sposani@asu.edu - 1217155082</h5>
+<h5>Valmeekam Karthik - kvalmeek@asu.edu - 1216539207</h5>
+
+            </div>
+        </div>
+
+
+        </div>
+    </div>
+    <div class="container-fluid m-2 justify-content-center " id="plot-container">
+        <div class="row m-2 eachrow">
+            <div class="col-md  text-center"><div class="row m-2"><label class="titles">Choropleth</label></div><svg viewBox = "-50 0 300 300"id='choropleth'></svg>
+
+                <button id="play-button" class="anytext playButton playButtonHover" >Play</button>
+            </div>
+
+            </div>
+
+      <div class="row m-2 ">
+        <div class="col-md m-2 eachrow"><div class="row m-2 justify-content-between">
+            <label class="titles">Radar Plot</label>
+<div class="radartime" style="display: none">
+            <b>TimeSlot:</b>
+          <select id='time-select' class="dropdown" value='All' onchange='on_change_Radar()'>
+            <option value='All'>All day</option>
+            <option value='00'>00 AM - 3 AM</option>
+            <option value='03'>3 AM - 6 PM</option>
+            <option value='06'>6 AM - 9 AM</option>
+            <option value='09'>9 AM - 12 PM</option>
+            <option value='12'>12 PM - 15 PM</option>
+            <option value='15'>15 PM - 18 PM</option>
+            <option value='18'>18 PM - 21 PM</option>
+            <option value='21'>21 PM - 00 AM</option>
+          </select>
+        </div>
+
+        </div>
+        <svg viewBox = "20 0 450 450" id='radar'></svg>
+        </div>
+        <div class="col-md  m-2 eachrow" id="forcheckboxes"><label class="titles">Scatter Plot</label><svg viewBox="0 0 720 480" id='scatterplot'></svg>
+            <!-- <input type="checkbox" id="sewer_and_water" name="sewer_and_water" value="sewer_and_water" onclick="onChangeCheck()">
+            <label for="sewer_and_water">sewer_and_water</label>
+            <input type="checkbox" id="power" name="power" value="power" onclick="onChangeCheck()">
+            <label for="power">power</label>
+            <input type="checkbox" id="roads_and_bridges" name="roads_and_bridges" value="roads_and_bridges" onclick="onChangeCheck()">
+            <label for="roads_and_bridges">roads_and_bridges</label>
+            <input type="checkbox" id="medical" name="medical" value="medical" onclick="onChangeCheck()">
+            <label for="medical">medical</label>
+            <input type="checkbox" id="buildings" name="buildings" value="buildings" onclick="onChangeCheck()">
+            <label for="buildings">buildings</label>
+            <input type="checkbox" id="shake_intensity" name="shake_intensity" value="shake_intensity" onclick="onChangeCheck()">
+            <label for="shake_intensity">shake_intensity</label> -->
+        </div>
+
+        </div>
+        <div class="row m-2 ">
+            <div class="col-md eachrow"><label class="titles">Innovative View</label><svg viewBox = "100 150 950 950" id='innovative'></svg></div>
+        </div>
+
+            <div class="bartooltip" style="display: none;"><svg viewBox = "0 0 250 270"id='barchart'></svg> </div>
+
+
+    </div>
+
+    </div>
+</body>
