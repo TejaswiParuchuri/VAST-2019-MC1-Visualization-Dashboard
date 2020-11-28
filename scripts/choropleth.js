@@ -9,14 +9,16 @@ document.addEventListener("DOMContentLoaded", function () {
     .select("#choropleth")
     .attr("width", width + margin.left + margin.right + 200)
     .attr("height", height + margin.top + margin.bottom + 300);
-    // nav = d3.select("#navigation").attr("width",200)
-    // .attr("height",300)
-    d3.select("#navi").append("div")
+  // nav = d3.select("#navigation").attr("width",200)
+  // .attr("height",300)
+  d3.select("#navi")
+    .append("div")
     .attr("class", "year label")
-    .attr("id","nav")
+    .attr("id", "nav")
     .attr("text-anchor", "end")
     .attr("y", height - 30)
     .attr("x", width);
+
   Promise.all([
     d3.json("data/StHimark.geojson"),
     d3.csv("data/updated_reports.csv"),
@@ -169,20 +171,18 @@ function update(x) {
   // console.log(x);
   //Gets the nearest 5th minute time
   // Add over lay
-  d3.select("#nav").text(x)
-  var elementPosition = $('#nav').offset();
+  d3.select("#nav").text(x);
+  var elementPosition = $("#nav").offset();
 
-$(window).scroll(function(){
-        if($(window).scrollTop() > elementPosition.top){
-              $('#nav').css('position','fixed').css('top','0');
-        } else {
-            $('#nav').css('position','static');
-        }    
-});
-
+  $(window).scroll(function () {
+    if ($(window).scrollTop() > elementPosition.top) {
+      $("#nav").css("position", "fixed").css("top", "0px");
+    } else {
+      $("#nav").css("position", "static").css("top", "0px");
+    }
+  });
 
   //////////
-
 
   var coeff = 1000 * 60 * 5;
   var rounded = new Date(Math.round(x.getTime() / coeff) * coeff);

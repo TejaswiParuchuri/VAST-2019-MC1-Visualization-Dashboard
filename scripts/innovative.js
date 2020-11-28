@@ -4,7 +4,6 @@ document.addEventListener("DOMContentLoaded", function () {
     .select("#innovative")
     .attr("width", width + margin.left + margin.right + 750)
     .attr("height", height + margin.top + margin.bottom + 750);
- 
 });
 // function arcTween(outerRadius, delay) {
 //   return function() {
@@ -19,96 +18,88 @@ document.addEventListener("DOMContentLoaded", function () {
  * @param  {String} A hexcolor value
  * @return {String} The contrasting color (black or white)
  */
-var getContrast = function (hexcolor){
-
-	// If a leading # is provided, remove it
-	if (hexcolor.slice(0, 1) === '#') {
-		hexcolor = hexcolor.slice(1);
-	}
-
-	// If a three-character hexcode, make six-character
-	if (hexcolor.length === 3) {
-		hexcolor = hexcolor.split('').map(function (hex) {
-			return hex + hex;
-		}).join('');
-	}
-
-	// Convert to RGB value
-	var r = parseInt(hexcolor.substr(0,2),16);
-	var g = parseInt(hexcolor.substr(2,2),16);
-	var b = parseInt(hexcolor.substr(4,2),16);
-
-	// Get YIQ ratio
-	var yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
-
-	// Check contrast
-	return (yiq >= 128) ? 'black' : 'white';
-
-};
-function checkfunc(x){
-  if (x!=""){
-    return 1
+var getContrast = function (hexcolor) {
+  // If a leading # is provided, remove it
+  if (hexcolor.slice(0, 1) === "#") {
+    hexcolor = hexcolor.slice(1);
   }
-  else{
-    return 0
+
+  // If a three-character hexcode, make six-character
+  if (hexcolor.length === 3) {
+    hexcolor = hexcolor
+      .split("")
+      .map(function (hex) {
+        return hex + hex;
+      })
+      .join("");
+  }
+
+  // Convert to RGB value
+  var r = parseInt(hexcolor.substr(0, 2), 16);
+  var g = parseInt(hexcolor.substr(2, 2), 16);
+  var b = parseInt(hexcolor.substr(4, 2), 16);
+
+  // Get YIQ ratio
+  var yiq = (r * 299 + g * 587 + b * 114) / 1000;
+
+  // Check contrast
+  return yiq >= 128 ? "black" : "white";
+};
+function checkfunc(x) {
+  if (x != "") {
+    return 1;
+  } else {
+    return 0;
   }
 }
-innov_dict=[]
-function innov_preprocess(bisected){
-  
+innov_dict = [];
+function innov_preprocess(bisected) {
   score_dict2 = {};
-  new_date = new Date(reportsData[bisected-1]["time"].replaceAll("-", "/"));
-  for (var j=0;j<bisected;j++) {
+  new_date = new Date(reportsData[bisected - 1]["time"].replaceAll("-", "/"));
+  for (var j = 0; j < bisected; j++) {
     // console.log(j)
-    if(j==bisected) break;
+    if (j == bisected) break;
     n_date = new Date(reportsData[j]["time"].replaceAll("-", "/"));
     // console.log(n_date.getDate(), new_date.getDate())
     if (n_date.getDate() == new_date.getDate()) {
       loct = +reportsData[j]["location"];
       // console.log(loct)
-    saw = checkfunc(reportsData[j]["sewer_and_water"]);
-    power = checkfunc(reportsData[j]["power"]);
-    roads = checkfunc(reportsData[j]["roads_and_bridges"]);
-    med = checkfunc(reportsData[j]["medical"]);
-    buildings = checkfunc(reportsData[j]["buildings"]);
-    si = checkfunc(reportsData[j]["shake_intensity"]);
-    // console.log(Object.keys(score_dict2))//[saw, power, roads, med, buildings, si])
-    
-    if(Object.keys(score_dict2).includes(String(loct))){
-      // console.log(score_dict2)
-      score_dict2[loct]["sewer_and_water"]+=saw
-      score_dict2[loct]["power"]+=power
-      score_dict2[loct]["roads_and_bridges"]+=roads
-      score_dict2[loct]["medical"]+=med
-      score_dict2[loct]["buildings"]+=buildings
-      score_dict2[loct]["shake_intensity"]+=si
+      saw = checkfunc(reportsData[j]["sewer_and_water"]);
+      power = checkfunc(reportsData[j]["power"]);
+      roads = checkfunc(reportsData[j]["roads_and_bridges"]);
+      med = checkfunc(reportsData[j]["medical"]);
+      buildings = checkfunc(reportsData[j]["buildings"]);
+      si = checkfunc(reportsData[j]["shake_intensity"]);
+      // console.log(Object.keys(score_dict2))//[saw, power, roads, med, buildings, si])
 
-    }
-    else{
-      score_dict2[loct] = {}
-      score_dict2[loct]["sewer_and_water"]=saw
-      score_dict2[loct]["power"]=power
-      score_dict2[loct]["roads_and_bridges"]=roads
-      score_dict2[loct]["medical"]=med
-      score_dict2[loct]["buildings"]=buildings
-      score_dict2[loct]["shake_intensity"]=si
-    }
+      if (Object.keys(score_dict2).includes(String(loct))) {
+        // console.log(score_dict2)
+        score_dict2[loct]["sewer_and_water"] += saw;
+        score_dict2[loct]["power"] += power;
+        score_dict2[loct]["roads_and_bridges"] += roads;
+        score_dict2[loct]["medical"] += med;
+        score_dict2[loct]["buildings"] += buildings;
+        score_dict2[loct]["shake_intensity"] += si;
+      } else {
+        score_dict2[loct] = {};
+        score_dict2[loct]["sewer_and_water"] = saw;
+        score_dict2[loct]["power"] = power;
+        score_dict2[loct]["roads_and_bridges"] = roads;
+        score_dict2[loct]["medical"] = med;
+        score_dict2[loct]["buildings"] = buildings;
+        score_dict2[loct]["shake_intensity"] = si;
+      }
     }
 
-
-    
-    
     // temp_dict2 = JSON.parse(JSON.stringify(score_dict2))
     // barData.push({"time":reportsData[j]["time"].replaceAll('-','/'),"ImpactAndDamagePerDay":Object.entries(temp_dict2)})
   }
-  console.log(score_dict2)
-  return score_dict2
+  console.log(score_dict2);
+  return score_dict2;
 }
 
-
 function drawInnovative(bisected) {
-  
-  i_map.selectAll('*').remove()
+  i_map.selectAll("*").remove();
   cat_text = {
     shake_intensity: "\uf83e",
     sewer_and_water: "\uf043",
@@ -117,7 +108,7 @@ function drawInnovative(bisected) {
     buildings: "\uf1ad",
     medical: "\uf469",
   };
-  loc_list1 = innov_preprocess(bisected)
+  loc_list1 = innov_preprocess(bisected);
   //eval("(" + reports[bisected]["ReportsPerDay"] + ")");
   arr_group1 = [];
   for (var loc in loc_list1) {
@@ -227,7 +218,8 @@ function drawInnovative(bisected) {
         .attr("fill", (d) => {
           while (d.depth > 1) d = d.parent;
           return color(Object.keys(d.data)[0]);
-        }).attr("fill-opacity","1")
+        })
+        .attr("fill-opacity", "1")
         .attr("opacity", (d) => {
           if (d.depth > 1) return 0;
           else return 1;
@@ -297,17 +289,17 @@ function drawInnovative(bisected) {
         })
         .attr("transform", function (d, i) {
           if (d.depth > 1) {
-            
             var x = arc.centroid(d)[0];
             var y = arc.centroid(d)[1];
             return "translate(" + x + "," + y + ")";
           }
         })
-        .style("fill", function(d){
-      //     while (d.depth > 1) d = d.parent;
-      // return getContrast(color(Object.keys(d.data)[0]))
-      return "black"
-        }).style("fill-opacity",1)
+        .style("fill", function (d) {
+          //     while (d.depth > 1) d = d.parent;
+          // return getContrast(color(Object.keys(d.data)[0]))
+          return "black";
+        })
+        .style("fill-opacity", 1)
         .attr("opacity", 0);
       // g.append("image").attr("xlink:href",function(d,i){
 
@@ -361,125 +353,11 @@ function drawInnovative(bisected) {
     .text((d) => {
       if (d.depth == 1) return Object.keys(d.data)[0];
       else return "";
-    }).attr("fill",function(d){
+    })
+    .attr("fill", function (d) {
       // while (d.depth > 1) d = d.parent;
       // return getContrast(color(Object.keys(d.data)[0]))
-      return "black"
+      return "black";
     });
   // .attr("opacity",d=>{if(d.depth>1)return 0;else return 1;});
-
-  //Legends
-  i_map
-    .append("text")
-    .attr("font-family", "FontAwesome")
-    .attr("font-size", "1em")
-    .style("cursor", "pointer")
-    .style("text-anchor", "middle")
-    .text("\uf83e")
-    .attr("x", 100)
-    .attr("y", 180);
-  i_map
-    .append("text")
-    .attr("font-family", "Fredoka One")
-    .attr("class", "legtext")
-    .attr("font-size", "0.7em")
-    .style("cursor", "pointer")
-    .text("Shake Intensity")
-    .attr("x", 115)
-    .attr("y", 175);
-
-  i_map
-    .append("text")
-    .attr("font-family", "FontAwesome")
-    .attr("font-size", "1em")
-    .style("cursor", "pointer")
-    .style("text-anchor", "middle")
-    .text("\uf043")
-    .attr("x", 100)
-    .attr("y", 200);
-  i_map
-    .append("text")
-    .attr("font-family", "Fredoka One")
-    .attr("class", "legtext")
-    .attr("font-size", "0.7em")
-    .style("cursor", "pointer")
-    .text("Sewer & Water")
-    .attr("x", 115)
-    .attr("y", 198);
-
-  i_map
-    .append("text")
-    .attr("font-family", "FontAwesome")
-    .attr("font-size", "1em")
-    .style("cursor", "pointer")
-    .style("text-anchor", "middle")
-    .text("\uf0e7")
-    .attr("x", 100)
-    .attr("y", 220);
-  i_map
-    .append("text")
-    .attr("font-family", "Fredoka One")
-    .attr("class", "legtext")
-    .attr("font-size", "0.7em")
-    .style("cursor", "pointer")
-    .text("Power")
-    .attr("x", 115)
-    .attr("y", 217);
-
-  i_map
-    .append("text")
-    .attr("font-family", "FontAwesome")
-    .attr("font-size", "1em")
-    .style("cursor", "pointer")
-    .style("text-anchor", "middle")
-    .text("\uf018")
-    .attr("x", 100)
-    .attr("y", 240);
-  i_map
-    .append("text")
-    .attr("font-family", "Fredoka One")
-    .attr("class", "legtext")
-    .attr("font-size", "0.7em")
-    .style("cursor", "pointer")
-    .text("Roads & Bridges")
-    .attr("x", 115)
-    .attr("y", 237);
-
-  i_map
-    .append("text")
-    .attr("font-family", "FontAwesome")
-    .attr("font-size", "1em")
-    .style("cursor", "pointer")
-    .style("text-anchor", "middle")
-    .text("\uf1ad")
-    .attr("x", 100)
-    .attr("y", 260);
-  i_map
-    .append("text")
-    .attr("font-family", "Fredoka One")
-    .attr("class", "legtext")
-    .attr("font-size", "0.7em")
-    .style("cursor", "pointer")
-    .text("Buildings")
-    .attr("x", 115)
-    .attr("y", 258);
-
-  i_map
-    .append("text")
-    .attr("font-family", "FontAwesome")
-    .attr("font-size", "1em")
-    .style("cursor", "pointer")
-    .style("text-anchor", "middle")
-    .text("\uf469")
-    .attr("x", 100)
-    .attr("y", 280);
-  i_map
-    .append("text")
-    .attr("font-family", "Fredoka One")
-    .attr("class", "legtext")
-    .attr("font-size", "0.7em")
-    .style("cursor", "pointer")
-    .text("Medical")
-    .attr("x", 115)
-    .attr("y", 278);
 }

@@ -14,7 +14,6 @@
 }
 .anytext {
   font-family: "Balsamiq Sans";
-  
 }
 .anytext1 {
   color: white;
@@ -236,4 +235,27 @@ div.label-map {
 .year.label {
   font: 500 16px "Fredoka One";
   fill: #ddd;
+  z-index: 3;
+}
+
+#navi {
+  width: 100%;
+  height: 10px;
+  padding-left: 20px;
+}
+
+.legendIcons {
+  flex: 1;
+  flex-direction: row;
+  text-align: center;
+  font: 500 16px "Fredoka One";
+  background-color: white;
+  padding: 14px 16px;
+  z-index: 3;
+}
+
+.dropdown {
+  padding-left: 10px;
+  border-radius: 6px;
+  font-family: Fredoka One;
 }
