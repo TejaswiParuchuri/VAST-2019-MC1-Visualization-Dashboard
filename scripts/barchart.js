@@ -8,8 +8,8 @@ document.addEventListener('DOMContentLoaded', function(){
     b_map = d3.select("#barchart").attr("width", widthBar)
     .attr("height", heightBar)
     x_barScale = d3.scaleBand()
-.range([0, widthBar]).domain([6,7,8,9,10,11])
-.padding(0.6);
+.range([0, 80]).domain([6,7,8,9,10,11])
+.padding(0.7);
 y_barScale = d3.scaleLinear().domain([0,10]).range([heightBar,0]);
 flag_bar=0;
 })
@@ -102,28 +102,32 @@ while(final_x.getDate() != 6)
 }
 // console.log(list_val)
 if(flag_bar==0){
-  b_map.append("g")
+  var x_axis = b_map.append("g")
               .attr("transform", "translate(0," + heightBar + ")")
-              .call(d3.axisBottom(x_barScale));
+              .call(d3.axisBottom(x_barScale).tickSize(0))
+              .call(g => g.select(".domain")
+        .remove())
+      .call(g => g.selectAll(".tick:not(:first-of-type) line")
+        .attr("stroke-opacity", 0.5)
+        .attr("stroke-dasharray", "5,10"));
 
-              
+  x_axis.selectAll("text").remove();          
               
         
           // add the y Axis
-          b_map.append("g")
-              .call(d3.axisLeft(y_barScale));
+    var y_axis = b_map.append("g")
+          .call(d3.axisLeft(y_barScale).tickSize(0))
+          .call(g => g.select(".domain")
+            .remove())
+          .call(g => g.select(".range")
+            .remove())
+          .call(g => g.selectAll(".tick:not(:first-of-type) line")
+            .attr("stroke-opacity", 0.5)
+            .attr("stroke-dasharray", "5,10"));
+    
+    y_axis.selectAll("text").remove(); 
 
-          //     b_map.append("text")
-          // .attr("transform", "rotate(-90)")
-          // .attr("x", -(heightBar/2))
-          // .attr("y",  marginBar.left-100)
-          // .style("font-family","sans-serif")
-          // .attr("dy", "1em")
-          // .style("fill","black")
-          // .style("text-anchor","middle")
-          // .style("font-weight","700")
-          // .style("font-size","14px")
-          // .text("Average Impact and Damage per day");
+
 
           // b_map.append("text")
           // .attr("transform","translate(" + (widthBar/2) + " ," + (heightBar +  40) + ")")
@@ -151,8 +155,17 @@ else{
         
           // add the x Axis
           
-
-
+//console.log(location_name);
+ 
+  /*b_map.append("text")
+          .attr("x", (widthBar / 2))             
+          .attr("y", 12 - (margin.top)/2)
+          .attr("text-anchor", "middle")  
+          .style("font-family","sans-serif")
+          .style("font-size", "16px") 
+          .style("text-decoration", "underline") 
+          .style("font-weight","bold") 
+          .text(location_name);*/
 
 ///
 

@@ -296,14 +296,22 @@ function color_map1(bisected, x_axis_value, x_initial) {
       drawRadarChart(bisected, x_axis_value, +d.properties.Id);
     })
     .on("mouseover", function (d) {
+      
       barchart(bisected, x_axis_value, x_initial, +d.properties.Id);
       d3.select(".bartooltip")
         .style("display", "inline-block")
         .style("left", d3.event.pageX - 40 + "px")
-        .style("top", d3.event.pageY - 80 + "px");
+        .style("top", d3.event.pageY - 80 + "px")
+        .append("text")
+        .text(d.properties.Nbrhood)
+        .style("text-anchor","middle")
+        .style("font-weight","700")
+        .style("fill","black")
+        .style("font-size","14px");
+        
     })
     .on("mouseout", function (d) {
-      d3.select(".bartooltip").style("display", "none");
+      d3.select(".bartooltip").style("display", "none").selectAll("text").remove();
       d3.select(this).classed("hover_highlight", false);
     })
     .on("mousemove", function (d) {
