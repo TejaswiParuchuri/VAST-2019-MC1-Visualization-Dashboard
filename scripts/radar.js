@@ -5,7 +5,23 @@ var width = -margin.left - margin.right;
 var height = -margin.top - margin.bottom;
 var shake_intensity_radius = 0;
 var reportsData;
-
+var color_radar = d3.scaleOrdinal(d3.schemeCategory10).domain(d3.range(0, 9));
+var color_map_radar = {
+  sewer_and_water: color(0),
+  power: color(1),
+  roads_and_bridges: color(2),
+  medical: color(3),
+  buildings: color(4),
+  shake_intensity: color(5),
+};
+var cat_text_radar = {
+  shake_intensity: "\uf83e",
+  sewer_and_water: "\uf043",
+  power: "\uf0e7",
+  roads_and_bridges: "\uf018",
+  buildings: "\uf1ad",
+  medical: "\uf469",
+};
 document.addEventListener("DOMContentLoaded", function () {
   //	width += 900;
   //    height += 348;
@@ -22,9 +38,10 @@ document.addEventListener("DOMContentLoaded", function () {
   //     // drawRadarChart();
   // })
   d3.select("#legendIcons").append("div");
+  // legends();
 });
 
-legends();
+
 function legends() {
   var elementPosition = $("#legendIcons").offset();
 
@@ -327,12 +344,16 @@ var RadarChart = {
       .append("text")
       .attr("class", "legend")
       .text(function (d) {
-        return d;
+        // console.log(d,cat_text_radar[d])
+        return cat_text_radar[d.trim()];
       })
-      .style("font-family", "Fredoka One")
-      .style("font-size", "11px")
+      .style("font-family", "FontAwesome")
+      .style("fill",function(d){
+        return color_map_radar[d.trim()];
+      })
+      .style("font-size", "26px")
       .attr("text-anchor", "middle")
-      .attr("dy", "1.5em")
+      .attr("dy", "1.5em").style("stroke","black")
       .attr("transform", function (d, i) {
         return "translate(0, -10)";
       })
@@ -344,10 +365,18 @@ var RadarChart = {
         );
       })
       .attr("y", function (d, i) {
+        if(d.trim()!="sewer_and_water"){
         return (
           (cfg.h / 2) * (1 - Math.cos((i * cfg.radians) / total)) -
           20 * Math.cos((i * cfg.radians) / total)
         );
+        }
+        else{
+          return (
+            (cfg.h / 2) * (1 - Math.cos((i * cfg.radians) / total)) -
+            20 * Math.cos((i * cfg.radians) / total)
+          )-20;
+        }
       });
 
     //calculating the data-points (corners) of the polygon

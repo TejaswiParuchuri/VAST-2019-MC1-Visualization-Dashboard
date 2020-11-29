@@ -1,10 +1,12 @@
 const margin = { top: 20, right: 20, bottom: 50, left: 50 };
 var width = -margin.left - margin.right;
 var height = -margin.top - margin.bottom;
+var currentValue = 0;
 document.addEventListener("DOMContentLoaded", function () {
   // rectt = document.getElementById('plot-container').getBoundingClientRect();
   width += 720;
   height += 480;
+  extent = [0, 200];
   c_map = d3
     .select("#choropleth")
     .attr("width", width + margin.left + margin.right + 200)
@@ -18,6 +20,17 @@ document.addEventListener("DOMContentLoaded", function () {
     .attr("text-anchor", "end")
     .attr("y", height - 30)
     .attr("x", width);
+    d3.selectAll(".clickable").style("display","none");
+
+    var elementPosition = $("#navi").offset();
+  d3.selectAll(".clickable").style("display","none");
+  $(window).scroll(function () {
+    if ($(window).scrollTop() > elementPosition.top) {
+      $("#navi").css("position", "fixed").css("top", "0px");
+    } else {
+      $("#navi").css("position", "static").css("top", "0px");
+    }
+  });
 
   Promise.all([
     d3.json("data/StHimark.geojson"),
@@ -81,6 +94,31 @@ function preprocess() {
 }
 function drawMap() {
   c_map.selectAll("*").remove();
+  var playButton = d3.select("#play-button");
+  playButton.on("click",function(){
+      var button = d3.select(this);
+      // console.log(button.html())
+      if(button.html() == "Pause"){
+          button.html("Play")
+          clearInterval(stepTimer);
+      }
+      else{
+          button.html("Pause");
+          stepTimer = setInterval(step,100);
+      }
+  })
+  function step(){
+    invert1 = sliderScale.invert(currentValue)
+    update(invert1);
+    invert1.setMinutes(invert1.getMinutes()+5)
+      currentValue=sliderScale(invert1)
+      
+      if(currentValue>extent[1]){
+          clearInterval(stepTimer);
+          d3.select("#play").attr("value", "Play");
+          currentValue=0;
+      }
+  }
   // create the map projection and geoPath
   slider();
 }
@@ -96,7 +134,7 @@ function slider() {
   // formatSecond = d3.timeFormat(":%S")
   checkdate = d3.timeFormat("%Y-%m-%d %H:%M:%S");
   // console.log(timeData[10]["time"]==checkdate(date))
-  extent = [0, 200];
+  
   // console.log(Object.values(timeData).length)//d3.extent(timeData,function(d){date = new Date(d.time); return date}))
 
   sliderScale = d3
@@ -134,7 +172,6 @@ function slider() {
           } else if (currentValue < extent[0]) {
             currentValue = extent[0];
           }
-          handle.attr("cx", currentValue);
           update(sliderScale.invert(currentValue));
         })
     );
@@ -172,17 +209,11 @@ function update(x) {
   //Gets the nearest 5th minute time
   // Add over lay
   d3.select("#nav").text(x);
-  var elementPosition = $("#nav").offset();
-
-  $(window).scroll(function () {
-    if ($(window).scrollTop() > elementPosition.top) {
-      $("#nav").css("position", "fixed").css("top", "0px");
-    } else {
-      $("#nav").css("position", "static").css("top", "0px");
-    }
-  });
-
+  
+  d3.selectAll(".clock").style("opacity",1)
   //////////
+  handle.attr("cx", currentValue);
+
 
   var coeff = 1000 * 60 * 5;
   var rounded = new Date(Math.round(x.getTime() / coeff) * coeff);
@@ -259,6 +290,7 @@ function color_map1(bisected, x_axis_value, x_initial) {
       // } ;
     })
     .on("click", function (d, i) {
+      d3.selectAll(".clickable").style("display","flex");
       drawScatter(bisected, +d.properties.Id);
       drawInnovative(bisected);
       drawRadarChart(bisected, x_axis_value, +d.properties.Id);

@@ -135,7 +135,7 @@ function drawInnovative(bisected) {
     arr_group1.push(Object.fromEntries(list_final));
   }
 
-  color = d3.scaleOrdinal(d3.quantize(d3.interpolateReds, 19 + 1));
+  color_inn = d3.scaleOrdinal(d3.quantize(d3.interpolateReds, 19 + 1));
   partition = (data) =>
     d3.partition().size([2 * Math.PI, radius])(
       d3.hierarchy(data).sum((d) => {
@@ -170,7 +170,7 @@ function drawInnovative(bisected) {
     })
     .cornerRadius(4);
   posX = 600;
-  scale_glyph = d3.scaleLinear().range([5, 25]);
+  scale_glyph = d3.scaleLinear().range([10, 25]);
   padAngles = [];
   extra_width = 20;
   temp = {};
@@ -217,7 +217,7 @@ function drawInnovative(bisected) {
         })
         .attr("fill", (d) => {
           while (d.depth > 1) d = d.parent;
-          return color(Object.keys(d.data)[0]);
+          return color_inn(Object.keys(d.data)[0]);
         })
         .attr("fill-opacity", "1")
         .attr("opacity", (d) => {
@@ -360,4 +360,87 @@ function drawInnovative(bisected) {
       return "black";
     });
   // .attr("opacity",d=>{if(d.depth>1)return 0;else return 1;});
+
+  //TEXT AT CENTER
+  i_map.append('g').attr("transform", "translate(" + posX + "," + (height + 200) + ")")
+  .attr("pointer-events", "none").append("text")
+  .attr("text-anchor", "middle")
+  .attr("font-size", 8)
+  .attr("font-family", "Fredoka One")
+  .text("Number of Reports")
+
+  colorCircles=i_map.selectAll('.colorCircle')
+
+colorCircles.data(mapData.features).join(
+  enter=>{
+    const g=enter.append("g").attr('class','colorCircle').attr("transform",(d,i)=> `translate(${-70},${height+70+i*20})`)
+	g.append('circle')
+				 .style('fill',(d,i)=>color_inn(+d.properties.Id))
+				 .attr('r',8)
+         .style('stroke',"black")
+         
+
+
+
+
+
+         g.append("text")
+         .text(function (d) {
+           return +d.properties.Id;
+         })
+         .attr("font-family", "Fredoka One")
+         .style("font-size", "10px")
+         .attr("y", 6)
+        //  .style("alignment-baseline", "middle")
+         .style("text-anchor", "middle");
+	g.append('text').style("font", "12px Fredoka One")
+				.attr("transform",(d,i)=> `translate(${28},${5})`)
+        .text(d => d.properties.Nbrhood).on("mouseover",function(d){
+            
+          d3.select("#parent" + d.properties.Id)
+            .transition()
+            .delay(100)
+            .attrTween("d", function (e) {
+              // console.log(e)
+              var z = d3.interpolate(e.y1, temp[i] + extra_width);
+              return function (t) {
+                e.y1 = z(t);
+                return arc(e);
+              };
+            });
+          d3.selectAll(".children" + d.properties.Id)
+  
+            .transition()
+            .delay(200)
+            .duration(400)
+            .attr("opacity", 1);
+        
+      })
+      .on("mouseout",function(d){
+       
+          d3.select("#parent" + d.properties.Id)
+            .transition()
+            .delay(150)
+            .attrTween("d", function (e) {
+              var z = d3.interpolate(e.y1, temp[i]);
+              return function (t) {
+                e.y1 = z(t);
+                return arc(e);
+              };
+            });
+          d3.selectAll(".children" + d.properties.Id)
+  
+            .transition()
+            .duration(400)
+            .attr("opacity", 0);
+        
+      })
+        
+      
+      
+      
+      }
+        
+    )
+        
 }
