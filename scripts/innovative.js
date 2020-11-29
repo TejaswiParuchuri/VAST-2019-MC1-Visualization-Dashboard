@@ -135,7 +135,7 @@ function drawInnovative(bisected) {
     arr_group1.push(Object.fromEntries(list_final));
   }
 
-  color_inn = d3.scaleOrdinal(d3.quantize(d3.interpolateRdYlBu, 19 + 1));
+  color_inn = d3.scaleOrdinal(d3.quantize(d3.interpolateWarm, 19 + 1));
   partition = (data) =>
     d3.partition().size([2 * Math.PI, radius])(
       d3.hierarchy(data).sum((d) => {
