@@ -29,12 +29,12 @@
         </div>
         <div class="text-center anytext">
             <div class="row">
-            <div class="col-md ">
+            <div class="d-flex col-md m-3 ">
                 <h5>Kusumakumari Vanteru - kvanteru@asu.edu - 1217031218</h5>
                 <h5>Thanuja Kallamadi - tkallama@asu.edu - 1217132202</h5>
                 <h5>Siva Mounavi Dadireddy - sdadired@asu.edu - 1217018868</h5>
             </div>
-            <div class="col-md">
+            <div class="d-flex col-md m-3">
                 <h5>Tejaswi Paruchuri - tparuchu@asu.edu - 1213268054</h5>
                 <h5>Sai Ramyatha Posani - sposani@asu.edu - 1217155082</h5>
                 <h5>Valmeekam Karthik - kvalmeek@asu.edu - 1216539207</h5>
@@ -45,46 +45,46 @@
 
         </div>
     </div>
-    <div class="row m-2" id="navi">
+    <div class="row m-3" id="navi">
         <!-- <div class="legendIcons"> -->
-            
+
             <i class="fas fa-wave-square mr-1" style="font-size:30px;color:rgb(140, 86, 75);"></i>
             <label style="padding-right:15px">- Shake Intensity</label>
-        
+
             <i class="fas fa-tint mr-1" style="font-size:30px;color:rgb(31, 119, 180);"></i>
             <label style="padding-right:15px">- Sewer & Water</label>
-        
+
             <i class="fas fa-building mr-1" style="font-size:30px;color:rgb(148, 103, 189);"></i>
             <label style="padding-right:15px">- Buildings</label>
-        
+
             <i class="fas fa-briefcase-medical mr-1" style="font-size:30px;color:rgb(214, 39, 40);"></i>
             <label style="padding-right:15px">- Medical</label>
-        
+
             <i class="fas fa-bolt mr-1" style="font-size:30px;color:rgb(255, 127, 14);"></i>
             <label style="padding-right:15px">- Power</label>
-        
+
             <i class="fas fa-road mr-1" style="font-size:30px;color:rgb(44, 160, 44);"></i>
             <label style="padding-right:15px">- Roads & Bridges</label>
 
             <i class="fas fa-clock mr-1 clock" style="font-size:30px;color:#DEC79B;opacity: 0;"></i>
             <label class="clock" style="padding-right:15px;opacity: 0;">-</label>
-        
+
         <!-- </div>   -->
     </div>
     <div class="container-fluid m-2 justify-content-center " id="plot-container">
-        
+
         <div class="row m-2 eachrow">
             <div class="col-md  text-center"><div class="row m-2"><label class="titles">Choropleth</label></div><svg viewBox = "-50 0 300 300"id='choropleth'></svg>
 
                 <button id="play-button" class="anytext playButton playButtonHover" >Play</button>
             </div>
-            
+
 
             </div>
             <div class="row m-2 eachrow ">
-                    
+
             </div>
-          
+
       <div class="row m-2 clickable">
         <div class="col-md m-2 eachrow"><div class="row m-2 justify-content-between">
             <label class="titles">Radar Plot</label>
@@ -103,7 +103,7 @@
           </select>
         </div>
 
-       
+
 
         </div>
         <svg viewBox = "20 0 450 450" id='radar'></svg>
@@ -131,10 +131,10 @@
             <div class="bartooltip" style="display: none;">
                 <div class="row m-2 nbrhood"><text></text></div>
                 <div class="row m-2">
-                    <div class="col-md cml"><text></text></div>
+                    <div class="col-md cml"><div class="row"><text style="text-anchor: middle; fill: black; font-size: 14px;">Average Impact</text></div><div class="row cml2"><text></text></div></div>
                     <div class="col-md"> <svg viewBox = "-20 -20 120 150"id='barchart'></svg></div>
                     </div>
-                
+
             </div>
 
     </div>

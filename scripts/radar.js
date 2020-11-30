@@ -297,7 +297,7 @@ var RadarChart = {
           return levelFactor * (1 - cfg.factor * Math.cos(0));
         })
         .attr("class", "legend")
-        .style("font-family", "Fredoka One")
+        .style("font-family", "var(--font)")
         .style("font-size", "10px")
         .attr(
           "transform",
@@ -434,7 +434,15 @@ var RadarChart = {
     });
 
     series = 0;
-
+    var shake_text=d3.select(id)
+							.append("svg")
+							.append("g")
+							.attr("transform", "translate(" + cfg.w/2 + "," + (cfg.h+(cfg.factor*radius*0.75)) + ")")
+							.append("text")
+							.attr("font-family", "var(--font)")
+							.style("font-size","14px")
+							.style("fill","grey")
+							.text("Shake Intensity is: "+parseFloat(shake_intensity_radius).toFixed(2))
     //tooltip for each data point
     var tooltip = d3.select("body").append("div").attr("class", "toolTip");
     d.forEach(function (y, x) {

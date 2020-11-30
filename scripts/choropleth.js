@@ -15,11 +15,20 @@ document.addEventListener("DOMContentLoaded", function () {
   // .attr("height",300)
   d3.select("#navi")
     .append("div")
-    .attr("class", "year label")
+    .attr("class", "year label mr-1")
     .attr("id", "nav")
     .attr("text-anchor", "end")
     .attr("y", height - 30)
     .attr("x", width);
+    d3.select("#navi").append("text").attr("class","mr-1").attr("id","locations").style("fill","#2A2E45").style("font-size","30px").style("font-family","FontAwesome").text("\uf21d").style("opacity",0)
+    d3.select("#navi")
+      .append("div")
+      .attr("class", "year label mr-1")
+      .attr("id", "nav12")
+      .attr("text-anchor", "end")
+      .attr("y", height - 30)
+      .attr("x", width);
+
     d3.selectAll(".clickable").style("display","none");
 
     var elementPosition = $("#navi").offset();
@@ -112,7 +121,7 @@ function drawMap() {
     update(invert1);
     invert1.setMinutes(invert1.getMinutes()+5)
       currentValue=sliderScale(invert1)
-      
+
       if(currentValue>extent[1]){
           clearInterval(stepTimer);
           d3.select("#play").attr("value", "Play");
@@ -134,7 +143,7 @@ function slider() {
   // formatSecond = d3.timeFormat(":%S")
   checkdate = d3.timeFormat("%Y-%m-%d %H:%M:%S");
   // console.log(timeData[10]["time"]==checkdate(date))
-  
+
   // console.log(Object.values(timeData).length)//d3.extent(timeData,function(d){date = new Date(d.time); return date}))
 
   sliderScale = d3
@@ -184,7 +193,7 @@ function slider() {
     .data(sliderScale.ticks(5))
     .enter()
     .append("text")
-    .attr("font-family", "Fredoka One")
+    .attr("font-family", "var(--font)")
     .attr("x", sliderScale)
     .attr("y", 10)
     .attr("text-anchor", "middle")
@@ -208,9 +217,12 @@ function update(x) {
   // console.log(x);
   //Gets the nearest 5th minute time
   // Add over lay
-  d3.select("#nav").text(x);
-  
+
+
   d3.selectAll(".clock").style("opacity",1)
+  d3.select("#locations").style("opacity",0)
+  d3.selectAll(".clickable").style("display","none");
+    d3.select("#nav12").text("");
   //////////
   handle.attr("cx", currentValue);
 
@@ -223,7 +235,9 @@ function update(x) {
   // console.log("Nearest",rounded)
   // "%Y-%m-%d %H:%M:%S"
   checkdate = d3.timeFormat("%Y-%m-%d %H:%M:%S");
+  checkd = d3.timeFormat("%a %b %d %H:%M:%S");
 
+  d3.select("#nav").text(checkd(x));
   bisect = d3.bisector((d) => d.time).left;
   // console.log(main_dict);
   // console.log(checkdate(rounded),bisect(timeData,checkdate(rounded)))
@@ -291,12 +305,14 @@ function color_map1(bisected, x_axis_value, x_initial) {
     })
     .on("click", function (d, i) {
       d3.selectAll(".clickable").style("display","flex");
+      d3.select("#nav12").text("- "+d.properties.Nbrhood);
+      d3.select("#locations").style("opacity",1)
       drawScatter(bisected, +d.properties.Id);
       drawInnovative(bisected);
       drawRadarChart(bisected, x_axis_value, +d.properties.Id);
     })
     .on("mouseover", function (d) {
-      
+
       barchart(bisected, x_axis_value, x_initial, +d.properties.Id);
       d3.select(".bartooltip")
         .style("display", "inline-block")
@@ -308,7 +324,23 @@ function color_map1(bisected, x_axis_value, x_initial) {
         // .style("font-weight","700")
         .style("fill","black")
         .style("font-size","14px");
-        
+        cmltext = d3.select(".bartooltip .row .cml .cml2 text").style("text-anchor","middle")
+        // .style("font-weight","700")
+        .style("fill","black")
+        .style("font-size","14px");
+        if (imptData["score"][+d.properties.Id] != undefined) {
+        cmltext.text(
+              parseFloat(imptData["score"][+d.properties.Id]
+                .slice(0, 6)
+                .reduce((a, b) => a + b) /
+                (6 * imptData["score"][+d.properties.Id][6])).toFixed(2)
+        )
+      }
+      else{
+        cmltext.text(0);
+      }
+
+
     })
     .on("mouseout", function (d) {
       d3.select(".bartooltip").style("display", "none");

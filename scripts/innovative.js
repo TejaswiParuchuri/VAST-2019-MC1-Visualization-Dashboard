@@ -335,7 +335,7 @@ function drawInnovative(bisected) {
     .attr("pointer-events", "none")
     .attr("text-anchor", "middle")
     .attr("font-size", 10)
-    .attr("font-family", "Fredoka One")
+    .attr("font-family", "var(--font)")
     .selectAll("text")
     .data(
       root
@@ -366,7 +366,7 @@ function drawInnovative(bisected) {
   .attr("pointer-events", "none").append("text")
   .attr("text-anchor", "middle")
   .attr("font-size", 8)
-  .attr("font-family", "Fredoka One")
+  .attr("font-family", "var(--font)")
   .text("Number of Reports")
 
   colorCircles=i_map.selectAll('.colorCircle')
@@ -378,7 +378,7 @@ colorCircles.data(mapData.features).join(
 				 .style('fill',(d,i)=>color_inn(+d.properties.Id))
 				 .attr('r',8)
          .style('stroke',"black")
-         
+
 
 
 
@@ -388,15 +388,15 @@ colorCircles.data(mapData.features).join(
          .text(function (d) {
            return +d.properties.Id;
          })
-         .attr("font-family", "Fredoka One")
+         .attr("font-family", "var(--font)")
          .style("font-size", "10px")
          .attr("y", 6)
         //  .style("alignment-baseline", "middle")
          .style("text-anchor", "middle");
-	g.append('text').style("font", "12px Fredoka One")
+	g.append('text').style("font", "12px var(--font)")
 				.attr("transform",(d,i)=> `translate(${28},${5})`)
         .text(d => d.properties.Nbrhood).on("mouseover",function(d){
-            
+
           d3.select("#parent" + d.properties.Id)
             .transition()
             .delay(100)
@@ -409,15 +409,15 @@ colorCircles.data(mapData.features).join(
               };
             });
           d3.selectAll(".children" + d.properties.Id)
-  
+
             .transition()
             .delay(200)
             .duration(400)
             .attr("opacity", 1);
-        
+
       })
       .on("mouseout",function(d){
-       
+
           d3.select("#parent" + d.properties.Id)
             .transition()
             .delay(150)
@@ -429,18 +429,18 @@ colorCircles.data(mapData.features).join(
               };
             });
           d3.selectAll(".children" + d.properties.Id)
-  
+
             .transition()
             .duration(400)
             .attr("opacity", 0);
-        
+
       })
-        
-      
-      
-      
+
+
+
+
       }
-        
+
     )
-        
+
 }
