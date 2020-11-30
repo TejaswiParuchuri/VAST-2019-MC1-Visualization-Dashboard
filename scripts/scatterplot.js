@@ -392,21 +392,29 @@ function draw_scatter(scatter_data) {
       g.append("text")
         .text(function (d) {
           return cat_text[d[2]];
-        })
-        .attr("font-family", "FontAwesome")
+        }).style("cursor","default")
+        .style("font-family", "FontAwesome")
         .style("font-size", "14px")
         .attr("y", 6)
         .style("alignment-baseline", "middle")
         .style("text-anchor", "middle");
     });
-
+    cat_text_scatter = {
+      shake_intensity: "Shake intensity",
+      sewer_and_water: "Sewer and Water",
+      power: "Power",
+      roads_and_bridges: "Roads and Bridges",
+      buildings: "Buildings",
+      medical: "Medical",
+    };
   s_map
     .selectAll(".location")
     .on("mousemove", function (d) {
       //console.log(d);
+      // if(d[2]=="")
       var display =
-        "Hour :" + d[0] + "<br/>" + d[2] + " Avg:" + d[1].toFixed(2);
-      //console.log(display);
+        "Hour of the day : <b style='color: black;'>" + d[0] + "</b><br/>" + cat_text_scatter[d[2]] + " Average: <b style='color: black;'>" + d[1].toFixed(2)+"</b>";
+      // console.log(display,cat_text_scatter[d[2]]);
       d3.select(this).transition().duration("50").attr("opacity", ".85");
 
       div.transition().duration(500).style("opacity", 1);
@@ -433,20 +441,22 @@ function draw_scatter(scatter_data) {
     .append("g")
     .attr("class", "scatterXAxis")
     .attr("transform", "translate(0," + height + ")")
-    .call(xAxis);
-  /*s_map.append("text")
-				.attr('class','axis')
-				.attr("x",width-100)
-				.attr("y",height+30)
-				.style('fill', 'gray')
-				.text("Time")
+    .call(xAxis)
+    s_map.append("text")
+			.attr('class','axis')
+				.attr("x",width-400)
+				.attr("y",height+40)
+        .style('fill', 'black')
+        .attr("font-family","var(--font)")
+				.text("Hour of the day")
 
 		s_map.append("text")
 			.attr('class','axis')
 			.attr("text-anchor", "middle")
-			.attr("transform", "rotate(-90)")
-			.attr("y", -height+100)
-			.attr("x", -75)
-			.style('fill', 'gray')
-			.text('Value')*/
+      .attr("transform", "rotate(-90)")
+      .attr("font-family","var(--font)")
+			.attr("x", -height+200)
+			.attr("y", -30)
+			.style('fill', 'black')
+			.text('Average Impact')
 }

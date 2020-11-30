@@ -1,9 +1,9 @@
-radius = 450;
+radius = 550;
 document.addEventListener("DOMContentLoaded", function () {
   i_map = d3
     .select("#innovative")
     .attr("width", width + margin.left + margin.right + 750)
-    .attr("height", height + margin.top + margin.bottom + 750);
+    .attr("height", height + margin.top + margin.bottom + 950);
 });
 // function arcTween(outerRadius, delay) {
 //   return function() {
@@ -169,7 +169,7 @@ function drawInnovative(bisected) {
       else return d.y1 - 5 + extra_width;
     })
     .cornerRadius(4);
-  posX = 600;
+  posX = 500;
   scale_glyph = d3.scaleLinear().range([10, 25]);
   padAngles = [];
   extra_width = 20;
@@ -179,7 +179,7 @@ function drawInnovative(bisected) {
   i_map
     .append("g")
     .attr("fill-opacity", 0.6)
-    .attr("transform", "translate(" + posX + "," + (height + 200) + ")")
+    .attr("transform", "translate(" + posX + "," + (height + 350) + ")")
     .selectAll("paths")
     .data(root.descendants().filter((d) => d.depth))
     .join(function (enter) {
@@ -249,7 +249,10 @@ function drawInnovative(bisected) {
         })
         .on("mouseout", (d, i) => {
           // arcTween(outerRadius- 20, 150)
+          // console.log(click_flag[+d.properties.Id])
+         
           if (d.depth == 1) {
+            if(click_flag[+Object.keys(d.data)[0]]==0){
             d3.select("#parent" + String(Object.keys(d.data)[0]))
               .transition()
               .delay(150)
@@ -266,6 +269,7 @@ function drawInnovative(bisected) {
               .duration(400)
               .attr("opacity", 0);
           }
+        }
         });
       g.append("text")
         .attr("class", (d, i) => {
@@ -329,12 +333,19 @@ function drawInnovative(bisected) {
     });
 
   // TEXT
+  dict_locations = {}
+  mapData.features.forEach(function(d){
+    // console.log(d);
+   dict_locations[+d.properties.Id] = d.properties.Nbrhood;
+  })
+  // console.log(dict_locations)
   i_map
     .append("g")
-    .attr("transform", "translate(" + posX + "," + (height + 200) + ")")
+    .attr("transform", "translate(" + posX + "," + (height + 350) + ")")
     .attr("pointer-events", "none")
     .attr("text-anchor", "middle")
-    .attr("font-size", 10)
+    .attr("font-size", 6)
+    .attr("font-weight",400)
     .attr("font-family", "var(--font)")
     .selectAll("text")
     .data(
@@ -350,8 +361,9 @@ function drawInnovative(bisected) {
       return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
     })
     .attr("dy", "0.35em")
+    // .style("font-size","12px")
     .text((d) => {
-      if (d.depth == 1) return Object.keys(d.data)[0];
+      if (d.depth == 1) return dict_locations[Object.keys(d.data)[0]];
       else return "";
     })
     .attr("fill", function (d) {
@@ -362,27 +374,28 @@ function drawInnovative(bisected) {
   // .attr("opacity",d=>{if(d.depth>1)return 0;else return 1;});
 
   //TEXT AT CENTER
-  i_map.append('g').attr("transform", "translate(" + posX + "," + (height + 200) + ")")
+  i_map.append('g').attr("transform", "translate(" + posX + "," + (height + 350) + ")")
   .attr("pointer-events", "none").append("text")
   .attr("text-anchor", "middle")
   .attr("font-size", 8)
   .attr("font-family", "var(--font)")
-  .text("Number of Reports")
+  .text("Based on")
+  i_map.append('g').attr("transform", "translate(" + posX + "," + (height + 360) + ")")
+  .attr("pointer-events", "none").append("text")
+  .attr("text-anchor", "middle")
+  .attr("font-size", 8)
+  .attr("font-family", "var(--font)")
+  .text("number of reports")
 
   colorCircles=i_map.selectAll('.colorCircle')
 
 colorCircles.data(mapData.features).join(
   enter=>{
-    const g=enter.append("g").attr('class','colorCircle').attr("transform",(d,i)=> `translate(${-70},${height+70+i*20})`)
+    const g=enter.append("g").attr('class','colorCircle').attr("transform",(d,i)=> `translate(${-180},${250+i*20})`)
 	g.append('circle')
 				 .style('fill',(d,i)=>color_inn(+d.properties.Id))
 				 .attr('r',8)
          .style('stroke',"black")
-
-
-
-
-
 
          g.append("text")
          .text(function (d) {
@@ -393,9 +406,16 @@ colorCircles.data(mapData.features).join(
          .attr("y", 6)
         //  .style("alignment-baseline", "middle")
          .style("text-anchor", "middle");
-	g.append('text').style("font", "12px var(--font)")
+        
+	g.append('text').attr("id",function(d){return "textt"+d.properties.Id;
+
+  }).style("font", "12px var(--font)").style("cursor","pointer")
 				.attr("transform",(d,i)=> `translate(${28},${5})`)
-        .text(d => d.properties.Nbrhood).on("mouseover",function(d){
+        .text(d => { 
+          
+          return d.properties.Nbrhood
+        }
+          ).on("mouseover",function(d){
 
           d3.select("#parent" + d.properties.Id)
             .transition()
@@ -417,7 +437,7 @@ colorCircles.data(mapData.features).join(
 
       })
       .on("mouseout",function(d){
-
+        if(click_flag[+d.properties.Id]==0){
           d3.select("#parent" + d.properties.Id)
             .transition()
             .delay(150)
@@ -433,7 +453,18 @@ colorCircles.data(mapData.features).join(
             .transition()
             .duration(400)
             .attr("opacity", 0);
+        }
 
+      })
+      .on("click",function(d){
+        if(click_flag[+d.properties.Id]==0){
+          click_flag[+d.properties.Id] =1 
+          g.select("#textt"+d.properties.Id).classed("textclick",true)
+        }
+        else{
+          click_flag[+d.properties.Id]=0
+          g.select("#textt"+d.properties.Id).classed("textclick",false)
+        }
       })
 
 

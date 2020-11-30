@@ -2,7 +2,9 @@ const margin = { top: 20, right: 20, bottom: 50, left: 50 };
 var width = -margin.left - margin.right;
 var height = -margin.top - margin.bottom;
 var currentValue = 0;
+click_flag = {};
 document.addEventListener("DOMContentLoaded", function () {
+  
   // rectt = document.getElementById('plot-container').getBoundingClientRect();
   width += 720;
   height += 480;
@@ -13,6 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
     .attr("height", height + margin.top + margin.bottom + 300);
   // nav = d3.select("#navigation").attr("width",200)
   // .attr("height",300)
+
   d3.select("#navi")
     .append("div")
     .attr("class", "year label mr-1")
@@ -28,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
       .attr("text-anchor", "end")
       .attr("y", height - 30)
       .attr("x", width);
-
+      
     d3.selectAll(".clickable").style("display","none");
 
     var elementPosition = $("#navi").offset();
@@ -53,7 +56,9 @@ document.addEventListener("DOMContentLoaded", function () {
     // console.log(barData)
     drawMap();
     // draw_innovative();
+    d3.select("#navi").style("display","flex");
   });
+  
 });
 var map;
 main_dict = [];
@@ -212,6 +217,9 @@ function slider() {
     .attr("class", "handle")
     .attr("transform", "translate(0," + 35 + ")")
     .attr("r", 4);
+
+
+    update(sliderScale.invert(currentValue))
 }
 function update(x) {
   // console.log(x);
@@ -273,7 +281,7 @@ function color_map1(bisected, x_axis_value, x_initial) {
   // console.log(d3.geoCentroid(mapData))
   let path = d3.geoPath().projection(projection);
   map = c_map.append("g");
-
+  on_date = d3.timeFormat("%a %b %d");
   map
     .selectAll("path")
     .data(mapData.features)
@@ -281,6 +289,7 @@ function color_map1(bisected, x_axis_value, x_initial) {
     .append("path")
     .attr("d", path)
     .attr("id", (d) => {
+      click_flag[+d.properties.Id] = 0;
       return d.properties.Id;
     })
     .attr("class", "countrymap")
@@ -306,7 +315,11 @@ function color_map1(bisected, x_axis_value, x_initial) {
     .on("click", function (d, i) {
       d3.selectAll(".clickable").style("display","flex");
       d3.select("#nav12").text("- "+d.properties.Nbrhood);
-      d3.select("#locations").style("opacity",1)
+      d3.select("#locations").style("opacity",1);
+      document.getElementById('time-select').value='All';
+      d3.select(".reliable").text("Report reliability for "+d.properties.Nbrhood+" on "+on_date(x_initial))
+      d3.select(".hourlyreports").text("Hourly reports for "+d.properties.Nbrhood+" on "+on_date(x_initial))
+      d3.select(".innovativetitle").text("Report comparison between neighbourhoods" +" on "+on_date(x_initial))
       drawScatter(bisected, +d.properties.Id);
       drawInnovative(bisected);
       drawRadarChart(bisected, x_axis_value, +d.properties.Id);

@@ -445,6 +445,15 @@ var RadarChart = {
 							.text("Shake Intensity is: "+parseFloat(shake_intensity_radius).toFixed(2))
     //tooltip for each data point
     var tooltip = d3.select("body").append("div").attr("class", "toolTip");
+    cat_text_radar_names
+     = {
+      shake_intensity: "Shake intensity",
+      sewer_and_water: "Sewer and Water",
+      power: "Power",
+      roads_and_bridges: "Roads and Bridges",
+      buildings: "Buildings",
+      medical: "Medical",
+    };
     d.forEach(function (y, x) {
       g.selectAll(".nodes")
         .data(y)
@@ -499,7 +508,7 @@ var RadarChart = {
             .style("top", d3.event.pageY - 80 + "px")
             .style("display", "inline-block")
             .html(
-              d.area + "<br><span>" + parseFloat(d.value).toFixed(2) + "</span>"
+              cat_text_radar_names[d.area.trim()] + "<br><span>" + parseFloat(d.value).toFixed(2) + "</span>"
             );
         })
         .on("mouseout", function (d) {

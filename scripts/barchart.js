@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function(){
     b_map = d3.select("#barchart").attr("width", widthBar)
     .attr("height", heightBar)
     x_barScale = d3.scaleBand()
-.range([0, 80]).domain([6,7,8,9,10,11])
+.range([0, 160]).domain([6,7,8,9,10,11])
 .padding(0.7);
 y_barScale = d3.scaleLinear().domain([0,10]).range([heightBar,0]);
 flag_bar=0;
@@ -102,7 +102,7 @@ while(final_x.getDate() != 6)
 }
 // console.log(list_val)
 if(flag_bar==0){
-  var x_axis = b_map.append("g")
+  var x_axis = b_map.append("g").attr("class","barAxis")
               .attr("transform", "translate(0," + heightBar + ")")
               .call(d3.axisBottom(x_barScale).tickSize(0))
               .call(g => g.select(".domain")
@@ -111,12 +111,12 @@ if(flag_bar==0){
         .attr("stroke-opacity", 0.5)
         .attr("stroke-dasharray", "5,10"));
 
-  x_axis.selectAll("text").remove();          
+  // x_axis.selectAll("text").remove();          
               
         
           // add the y Axis
-    var y_axis = b_map.append("g")
-          .call(d3.axisLeft(y_barScale).tickSize(0))
+    var y_axis = b_map.append("g").attr("class","barAxis")
+          .call(d3.axisLeft(y_barScale).ticks(5).tickSize(0))
           .call(g => g.select(".domain")
             .remove())
           .call(g => g.select(".range")
@@ -125,7 +125,7 @@ if(flag_bar==0){
             .attr("stroke-opacity", 0.5)
             .attr("stroke-dasharray", "5,10"));
     
-    y_axis.selectAll("text").remove(); 
+    // y_axis.selectAll("text").remove(); 
 
 
 
