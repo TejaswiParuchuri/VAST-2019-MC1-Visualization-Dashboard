@@ -54,9 +54,14 @@ document.addEventListener("DOMContentLoaded", function () {
     reportsData = values[1];
     preprocess();
     // console.log(barData)
+    
     drawMap();
     // draw_innovative();
+    // d3.select(".pageloader").style("display","none");
     d3.select("#navi").style("display","flex");
+    d3.select(".chorotitle").style("display","inline-block");
+    
+    d3.select("#play-button").style("display","inline-block");
   });
   
 });
