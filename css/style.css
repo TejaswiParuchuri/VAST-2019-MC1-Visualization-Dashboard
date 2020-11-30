@@ -1,10 +1,10 @@
 @import url("https://fonts.googleapis.com/css?family=Fredoka+One");
 @import url("https://fonts.googleapis.com/css?family=Balsamiq+Sans");
 @import url("https://fonts.googleapis.com/css?family=Comfortaa");
-:root{
-  --font : "Comfortaa";
-  --color2: #E3E7AF; 
-  --color4:black;
+:root {
+  --font: "Comfortaa";
+  --color2: #e3e7af;
+  --color4: black;
 }
 .tooltip {
   position: absolute;
@@ -273,16 +273,12 @@ div.label-map {
   font-family: var(--font);
 }
 
-.barAxis .tick text{
+.barAxis .tick text {
   font-family: var(--font);
 }
 
-.textclick{
-  
-  text-shadow: 1px 0px 0px var(--color2),
-		0px 1px 0px var(--color2),
-		2px 1px 0px var(--color2),
-		1px 2px 0px var(--color2),
-		3px 2px 0px var(--color2);
+.textclick {
+  text-shadow: 1px 0px 0px var(--color2), 0px 1px 0px var(--color2),
+    2px 1px 0px var(--color2), 1px 2px 0px var(--color2),
+    3px 2px 0px var(--color2);
 }
-

@@ -250,26 +250,26 @@ function drawInnovative(bisected) {
         .on("mouseout", (d, i) => {
           // arcTween(outerRadius- 20, 150)
           // console.log(click_flag[+d.properties.Id])
-         
-          if (d.depth == 1) {
-            if(click_flag[+Object.keys(d.data)[0]]==0){
-            d3.select("#parent" + String(Object.keys(d.data)[0]))
-              .transition()
-              .delay(150)
-              .attrTween("d", function () {
-                var z = d3.interpolate(d.y1, temp[i]);
-                return function (t) {
-                  d.y1 = z(t);
-                  return arc(d);
-                };
-              });
-            d3.selectAll(".children" + String(Object.keys(d.data)[0]))
 
-              .transition()
-              .duration(400)
-              .attr("opacity", 0);
+          if (d.depth == 1) {
+            if (click_flag[+Object.keys(d.data)[0]] == 0) {
+              d3.select("#parent" + String(Object.keys(d.data)[0]))
+                .transition()
+                .delay(150)
+                .attrTween("d", function () {
+                  var z = d3.interpolate(d.y1, temp[i]);
+                  return function (t) {
+                    d.y1 = z(t);
+                    return arc(d);
+                  };
+                });
+              d3.selectAll(".children" + String(Object.keys(d.data)[0]))
+
+                .transition()
+                .duration(400)
+                .attr("opacity", 0);
+            }
           }
-        }
         });
       g.append("text")
         .attr("class", (d, i) => {
@@ -333,11 +333,11 @@ function drawInnovative(bisected) {
     });
 
   // TEXT
-  dict_locations = {}
-  mapData.features.forEach(function(d){
+  dict_locations = {};
+  mapData.features.forEach(function (d) {
     // console.log(d);
-   dict_locations[+d.properties.Id] = d.properties.Nbrhood;
-  })
+    dict_locations[+d.properties.Id] = d.properties.Nbrhood;
+  });
   // console.log(dict_locations)
   i_map
     .append("g")
@@ -345,7 +345,7 @@ function drawInnovative(bisected) {
     .attr("pointer-events", "none")
     .attr("text-anchor", "middle")
     .attr("font-size", 6)
-    .attr("font-weight",400)
+    .attr("font-weight", 400)
     .attr("font-family", "var(--font)")
     .selectAll("text")
     .data(
@@ -374,70 +374,78 @@ function drawInnovative(bisected) {
   // .attr("opacity",d=>{if(d.depth>1)return 0;else return 1;});
 
   //TEXT AT CENTER
-  i_map.append('g').attr("transform", "translate(" + posX + "," + (height + 350) + ")")
-  .attr("pointer-events", "none").append("text")
-  .attr("text-anchor", "middle")
-  .attr("font-size", 8)
-  .attr("font-family", "var(--font)")
-  .text("Based on")
-  i_map.append('g').attr("transform", "translate(" + posX + "," + (height + 360) + ")")
-  .attr("pointer-events", "none").append("text")
-  .attr("text-anchor", "middle")
-  .attr("font-size", 8)
-  .attr("font-family", "var(--font)")
-  .text("number of reports")
+  i_map
+    .append("g")
+    .attr("transform", "translate(" + posX + "," + (height + 350) + ")")
+    .attr("pointer-events", "none")
+    .append("text")
+    .attr("text-anchor", "middle")
+    .attr("font-size", 8)
+    .attr("font-family", "var(--font)")
+    .text("Based on");
+  i_map
+    .append("g")
+    .attr("transform", "translate(" + posX + "," + (height + 360) + ")")
+    .attr("pointer-events", "none")
+    .append("text")
+    .attr("text-anchor", "middle")
+    .attr("font-size", 8)
+    .attr("font-family", "var(--font)")
+    .text("number of reports");
 
-  colorCircles=i_map.selectAll('.colorCircle')
+  colorCircles = i_map.selectAll(".colorCircle");
 
-colorCircles.data(mapData.features).join(
-  enter=>{
-    const g=enter.append("g").attr('class','colorCircle').attr("transform",(d,i)=> `translate(${-180},${250+i*20})`)
-	g.append('circle')
-				 .style('fill',(d,i)=>color_inn(+d.properties.Id))
-				 .attr('r',8)
-         .style('stroke',"black")
+  colorCircles.data(mapData.features).join((enter) => {
+    const g = enter
+      .append("g")
+      .attr("class", "colorCircle")
+      .attr("transform", (d, i) => `translate(${-180},${250 + i * 20})`);
+    g.append("circle")
+      .style("fill", (d, i) => color_inn(+d.properties.Id))
+      .attr("r", 8)
+      .style("stroke", "black");
 
-         g.append("text")
-         .text(function (d) {
-           return +d.properties.Id;
-         })
-         .attr("font-family", "var(--font)")
-         .style("font-size", "10px")
-         .attr("y", 6)
-        //  .style("alignment-baseline", "middle")
-         .style("text-anchor", "middle");
-        
-	g.append('text').attr("id",function(d){return "textt"+d.properties.Id;
-
-  }).style("font", "12px var(--font)").style("cursor","pointer")
-				.attr("transform",(d,i)=> `translate(${28},${5})`)
-        .text(d => { 
-          
-          return d.properties.Nbrhood
-        }
-          ).on("mouseover",function(d){
-
-          d3.select("#parent" + d.properties.Id)
-            .transition()
-            .delay(100)
-            .attrTween("d", function (e) {
-              // console.log(e)
-              var z = d3.interpolate(e.y1, temp[i] + extra_width);
-              return function (t) {
-                e.y1 = z(t);
-                return arc(e);
-              };
-            });
-          d3.selectAll(".children" + d.properties.Id)
-
-            .transition()
-            .delay(200)
-            .duration(400)
-            .attr("opacity", 1);
-
+    g.append("text")
+      .text(function (d) {
+        return +d.properties.Id;
       })
-      .on("mouseout",function(d){
-        if(click_flag[+d.properties.Id]==0){
+      .attr("font-family", "var(--font)")
+      .style("font-size", "10px")
+      .attr("y", 6)
+      //  .style("alignment-baseline", "middle")
+      .style("text-anchor", "middle");
+
+    g.append("text")
+      .attr("id", function (d) {
+        return "textt" + d.properties.Id;
+      })
+      .style("font", "12px var(--font)")
+      .style("cursor", "pointer")
+      .attr("transform", (d, i) => `translate(${28},${5})`)
+      .text((d) => {
+        return d.properties.Nbrhood;
+      })
+      .on("mouseover", function (d) {
+        d3.select("#parent" + d.properties.Id)
+          .transition()
+          .delay(100)
+          .attrTween("d", function (e) {
+            // console.log(e)
+            var z = d3.interpolate(e.y1, temp[i] + extra_width);
+            return function (t) {
+              e.y1 = z(t);
+              return arc(e);
+            };
+          });
+        d3.selectAll(".children" + d.properties.Id)
+
+          .transition()
+          .delay(200)
+          .duration(400)
+          .attr("opacity", 1);
+      })
+      .on("mouseout", function (d) {
+        if (click_flag[+d.properties.Id] == 0) {
           d3.select("#parent" + d.properties.Id)
             .transition()
             .delay(150)
@@ -454,24 +462,15 @@ colorCircles.data(mapData.features).join(
             .duration(400)
             .attr("opacity", 0);
         }
-
       })
-      .on("click",function(d){
-        if(click_flag[+d.properties.Id]==0){
-          click_flag[+d.properties.Id] =1 
-          g.select("#textt"+d.properties.Id).classed("textclick",true)
+      .on("click", function (d) {
+        if (click_flag[+d.properties.Id] == 0) {
+          click_flag[+d.properties.Id] = 1;
+          g.select("#textt" + d.properties.Id).classed("textclick", true);
+        } else {
+          click_flag[+d.properties.Id] = 0;
+          g.select("#textt" + d.properties.Id).classed("textclick", false);
         }
-        else{
-          click_flag[+d.properties.Id]=0
-          g.select("#textt"+d.properties.Id).classed("textclick",false)
-        }
-      })
-
-
-
-
-      }
-
-    )
-
+      });
+  });
 }

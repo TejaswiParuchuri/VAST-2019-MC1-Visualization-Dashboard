@@ -41,7 +41,6 @@ document.addEventListener("DOMContentLoaded", function () {
   // legends();
 });
 
-
 function legends() {
   var elementPosition = $("#legendIcons").offset();
 
@@ -348,12 +347,13 @@ var RadarChart = {
         return cat_text_radar[d.trim()];
       })
       .style("font-family", "FontAwesome")
-      .style("fill",function(d){
+      .style("fill", function (d) {
         return color_map_radar[d.trim()];
       })
       .style("font-size", "26px")
       .attr("text-anchor", "middle")
-      .attr("dy", "1.5em").style("stroke","black")
+      .attr("dy", "1.5em")
+      .style("stroke", "black")
       .attr("transform", function (d, i) {
         return "translate(0, -10)";
       })
@@ -365,17 +365,17 @@ var RadarChart = {
         );
       })
       .attr("y", function (d, i) {
-        if(d.trim()!="sewer_and_water"){
-        return (
-          (cfg.h / 2) * (1 - Math.cos((i * cfg.radians) / total)) -
-          20 * Math.cos((i * cfg.radians) / total)
-        );
-        }
-        else{
+        if (d.trim() != "sewer_and_water") {
           return (
             (cfg.h / 2) * (1 - Math.cos((i * cfg.radians) / total)) -
             20 * Math.cos((i * cfg.radians) / total)
-          )-20;
+          );
+        } else {
+          return (
+            (cfg.h / 2) * (1 - Math.cos((i * cfg.radians) / total)) -
+            20 * Math.cos((i * cfg.radians) / total) -
+            20
+          );
         }
       });
 
@@ -434,19 +434,28 @@ var RadarChart = {
     });
 
     series = 0;
-    var shake_text=d3.select(id)
-							.append("svg")
-							.append("g")
-							.attr("transform", "translate(" + cfg.w/2 + "," + (cfg.h+(cfg.factor*radius*0.75)) + ")")
-							.append("text")
-							.attr("font-family", "var(--font)")
-							.style("font-size","14px")
-							.style("fill","grey")
-							.text("Shake Intensity is: "+parseFloat(shake_intensity_radius).toFixed(2))
+    var shake_text = d3
+      .select(id)
+      .append("svg")
+      .append("g")
+      .attr(
+        "transform",
+        "translate(" +
+          cfg.w / 2 +
+          "," +
+          (cfg.h + cfg.factor * radius * 0.75) +
+          ")"
+      )
+      .append("text")
+      .attr("font-family", "var(--font)")
+      .style("font-size", "14px")
+      .style("fill", "grey")
+      .text(
+        "Shake Intensity is: " + parseFloat(shake_intensity_radius).toFixed(2)
+      );
     //tooltip for each data point
     var tooltip = d3.select("body").append("div").attr("class", "toolTip");
-    cat_text_radar_names
-     = {
+    cat_text_radar_names = {
       shake_intensity: "Shake intensity",
       sewer_and_water: "Sewer and Water",
       power: "Power",
@@ -508,7 +517,10 @@ var RadarChart = {
             .style("top", d3.event.pageY - 80 + "px")
             .style("display", "inline-block")
             .html(
-              cat_text_radar_names[d.area.trim()] + "<br><span>" + parseFloat(d.value).toFixed(2) + "</span>"
+              cat_text_radar_names[d.area.trim()] +
+                "<br><span>" +
+                parseFloat(d.value).toFixed(2) +
+                "</span>"
             );
         })
         .on("mouseout", function (d) {

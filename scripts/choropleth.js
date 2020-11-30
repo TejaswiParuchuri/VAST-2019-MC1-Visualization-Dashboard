@@ -4,7 +4,6 @@ var height = -margin.top - margin.bottom;
 var currentValue = 0;
 click_flag = {};
 document.addEventListener("DOMContentLoaded", function () {
-  
   // rectt = document.getElementById('plot-container').getBoundingClientRect();
   width += 720;
   height += 480;
@@ -23,19 +22,27 @@ document.addEventListener("DOMContentLoaded", function () {
     .attr("text-anchor", "end")
     .attr("y", height - 30)
     .attr("x", width);
-    d3.select("#navi").append("text").attr("class","mr-1").attr("id","locations").style("fill","#2A2E45").style("font-size","30px").style("font-family","FontAwesome").text("\uf21d").style("opacity",0)
-    d3.select("#navi")
-      .append("div")
-      .attr("class", "year label mr-1")
-      .attr("id", "nav12")
-      .attr("text-anchor", "end")
-      .attr("y", height - 30)
-      .attr("x", width);
-      
-    d3.selectAll(".clickable").style("display","none");
+  d3.select("#navi")
+    .append("text")
+    .attr("class", "mr-1")
+    .attr("id", "locations")
+    .style("fill", "#2A2E45")
+    .style("font-size", "30px")
+    .style("font-family", "FontAwesome")
+    .text("\uf21d")
+    .style("opacity", 0);
+  d3.select("#navi")
+    .append("div")
+    .attr("class", "year label mr-1")
+    .attr("id", "nav12")
+    .attr("text-anchor", "end")
+    .attr("y", height - 30)
+    .attr("x", width);
 
-    var elementPosition = $("#navi").offset();
-  d3.selectAll(".clickable").style("display","none");
+  d3.selectAll(".clickable").style("display", "none");
+
+  var elementPosition = $("#navi").offset();
+  d3.selectAll(".clickable").style("display", "none");
   $(window).scroll(function () {
     if ($(window).scrollTop() > elementPosition.top) {
       $("#navi").css("position", "fixed").css("top", "0px");
@@ -54,16 +61,15 @@ document.addEventListener("DOMContentLoaded", function () {
     reportsData = values[1];
     preprocess();
     // console.log(barData)
-    
+
     drawMap();
     // draw_innovative();
     // d3.select(".pageloader").style("display","none");
-    d3.select("#navi").style("display","flex");
-    d3.select(".chorotitle").style("display","inline-block");
-    
-    d3.select("#play-button").style("display","inline-block");
+    d3.select("#navi").style("display", "flex");
+    d3.select(".chorotitle").style("display", "inline-block");
+
+    d3.select("#play-button").style("display", "inline-block");
   });
-  
 });
 var map;
 main_dict = [];
@@ -114,29 +120,28 @@ function preprocess() {
 function drawMap() {
   c_map.selectAll("*").remove();
   var playButton = d3.select("#play-button");
-  playButton.on("click",function(){
-      var button = d3.select(this);
-      // console.log(button.html())
-      if(button.html() == "Pause"){
-          button.html("Play")
-          clearInterval(stepTimer);
-      }
-      else{
-          button.html("Pause");
-          stepTimer = setInterval(step,100);
-      }
-  })
-  function step(){
-    invert1 = sliderScale.invert(currentValue)
+  playButton.on("click", function () {
+    var button = d3.select(this);
+    // console.log(button.html())
+    if (button.html() == "Pause") {
+      button.html("Play");
+      clearInterval(stepTimer);
+    } else {
+      button.html("Pause");
+      stepTimer = setInterval(step, 100);
+    }
+  });
+  function step() {
+    invert1 = sliderScale.invert(currentValue);
     update(invert1);
-    invert1.setMinutes(invert1.getMinutes()+5)
-      currentValue=sliderScale(invert1)
+    invert1.setMinutes(invert1.getMinutes() + 5);
+    currentValue = sliderScale(invert1);
 
-      if(currentValue>extent[1]){
-          clearInterval(stepTimer);
-          d3.select("#play").attr("value", "Play");
-          currentValue=0;
-      }
+    if (currentValue > extent[1]) {
+      clearInterval(stepTimer);
+      d3.select("#play").attr("value", "Play");
+      currentValue = 0;
+    }
   }
   // create the map projection and geoPath
   slider();
@@ -223,22 +228,19 @@ function slider() {
     .attr("transform", "translate(0," + 35 + ")")
     .attr("r", 4);
 
-
-    update(sliderScale.invert(currentValue))
+  update(sliderScale.invert(currentValue));
 }
 function update(x) {
   // console.log(x);
   //Gets the nearest 5th minute time
   // Add over lay
 
-
-  d3.selectAll(".clock").style("opacity",1)
-  d3.select("#locations").style("opacity",0)
-  d3.selectAll(".clickable").style("display","none");
-    d3.select("#nav12").text("");
+  d3.selectAll(".clock").style("opacity", 1);
+  d3.select("#locations").style("opacity", 0);
+  d3.selectAll(".clickable").style("display", "none");
+  d3.select("#nav12").text("");
   //////////
   handle.attr("cx", currentValue);
-
 
   var coeff = 1000 * 60 * 5;
   var rounded = new Date(Math.round(x.getTime() / coeff) * coeff);
@@ -318,47 +320,59 @@ function color_map1(bisected, x_axis_value, x_initial) {
       // } ;
     })
     .on("click", function (d, i) {
-      d3.selectAll(".clickable").style("display","flex");
-      d3.select("#nav12").text("- "+d.properties.Nbrhood);
-      d3.select("#locations").style("opacity",1);
-      document.getElementById('time-select').value='All';
-      d3.select(".reliable").text("Report reliability for "+d.properties.Nbrhood+" on "+on_date(x_initial))
-      d3.select(".hourlyreports").text("Hourly reports for "+d.properties.Nbrhood+" on "+on_date(x_initial))
-      d3.select(".innovativetitle").text("Report comparison between neighbourhoods" +" on "+on_date(x_initial))
+      d3.selectAll(".clickable").style("display", "flex");
+      d3.select("#nav12").text("- " + d.properties.Nbrhood);
+      d3.select("#locations").style("opacity", 1);
+      document.getElementById("time-select").value = "All";
+      d3.select(".reliable").text(
+        "Report reliability for " +
+          d.properties.Nbrhood +
+          " on " +
+          on_date(x_initial)
+      );
+      d3.select(".hourlyreports").text(
+        "Hourly reports for " +
+          d.properties.Nbrhood +
+          " on " +
+          on_date(x_initial)
+      );
+      d3.select(".innovativetitle").text(
+        "Report comparison between neighbourhoods" + " on " + on_date(x_initial)
+      );
       drawScatter(bisected, +d.properties.Id);
       drawInnovative(bisected);
       drawRadarChart(bisected, x_axis_value, +d.properties.Id);
     })
     .on("mouseover", function (d) {
-
       barchart(bisected, x_axis_value, x_initial, +d.properties.Id);
       d3.select(".bartooltip")
         .style("display", "inline-block")
-        .style("left", d3.event.pageX +20 + "px")
-        .style("top", d3.event.pageY +30 + "px")
+        .style("left", d3.event.pageX + 20 + "px")
+        .style("top", d3.event.pageY + 30 + "px")
         .select(".nbrhood text")
         .text(d.properties.Nbrhood)
-        .style("text-anchor","middle")
+        .style("text-anchor", "middle")
         // .style("font-weight","700")
-        .style("fill","black")
-        .style("font-size","14px");
-        cmltext = d3.select(".bartooltip .row .cml .cml2 text").style("text-anchor","middle")
+        .style("fill", "black")
+        .style("font-size", "14px");
+      cmltext = d3
+        .select(".bartooltip .row .cml .cml2 text")
+        .style("text-anchor", "middle")
         // .style("font-weight","700")
-        .style("fill","black")
-        .style("font-size","14px");
-        if (imptData["score"][+d.properties.Id] != undefined) {
+        .style("fill", "black")
+        .style("font-size", "14px");
+      if (imptData["score"][+d.properties.Id] != undefined) {
         cmltext.text(
-              parseFloat(imptData["score"][+d.properties.Id]
-                .slice(0, 6)
-                .reduce((a, b) => a + b) /
-                (6 * imptData["score"][+d.properties.Id][6])).toFixed(2)
-        )
-      }
-      else{
+          parseFloat(
+            imptData["score"][+d.properties.Id]
+              .slice(0, 6)
+              .reduce((a, b) => a + b) /
+              (6 * imptData["score"][+d.properties.Id][6])
+          ).toFixed(2)
+        );
+      } else {
         cmltext.text(0);
       }
-
-
     })
     .on("mouseout", function (d) {
       d3.select(".bartooltip").style("display", "none");
